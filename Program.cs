@@ -54,18 +54,48 @@ app.MapPost("/administradores/login", ([FromBody] LoginDTO loginDTO, IAdministra
 #endregion
 
 #region Veiculos
+// Método de validar dto veículos 
+ErrosDeValidacao ValidaDTO(VeiculoDTO veiculoDTO)
+{
+    ErrosDeValidacao validacao = new ErrosDeValidacao
+    {
+        Mensagens = new List<string>()
+    };
+
+    if (string.IsNullOrEmpty(veiculoDTO.Nome))
+        validacao.Mensagens.Add("Nome de veículo não pode ser em branco!");
+    if (string.IsNullOrEmpty(veiculoDTO.Marca))
+        validacao.Mensagens.Add("Marca de veículo não pode ser em branco!");
+    if (veiculoDTO.Ano < 1950)
+    {
+        validacao.Mensagens.Add("Ano inválido! Informe um ano de veículo igual ou superior a 1950.");
+    }
+    ;
+
+    return validacao;
+}
+
 app.MapPost("/veiculos", ([FromBody] VeiculoDTO veiculoDTO, IVeiculoServico veiculoServico) =>
 {
+    var validacao = ValidaDTO(veiculoDTO);
+
+    if (validacao.Mensagens.Count > 0)
+    {
+        Results.BadRequest(validacao);
+    }
+
     var veiculo = new Veiculo
     {
         Nome = veiculoDTO.Nome,
         Marca = veiculoDTO.Marca,
         Ano = veiculoDTO.Ano
     };
+
     veiculoServico.Incluir(veiculo);
 
     return Results.Created($"/veiculo/{veiculo.Id}", veiculo);
 }).WithTags("Veiculos");
+
 
 app.MapGet("/veiculos", ([FromQuery] int? pagina, IVeiculoServico veiculoServico) =>
 {
@@ -86,8 +116,14 @@ app.MapGet("/veiculos/{id}", ([FromRoute] int id, IVeiculoServico veiculoServico
 app.MapPut("veiculos/{id}", ([FromRoute] int id, VeiculoDTO veiculoDTO, IVeiculoServico veiculoServico) =>
 {
     var veiculo = veiculoServico.BuscarPorId(id);
-
     if (veiculo == null) return Results.NotFound();
+
+    var validacao = ValidaDTO(veiculoDTO);
+    if (validacao.Mensagens.Count > 0)
+    {
+        Results.BadRequest(validacao);
+    }
+
 
     veiculo.Nome = veiculoDTO.Nome;
     veiculo.Marca = veiculoDTO.Marca;
