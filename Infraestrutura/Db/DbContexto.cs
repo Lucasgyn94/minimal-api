@@ -6,14 +6,22 @@ public class DbContexto : DbContext
 {
 
     // injeção do objeto do tipo IConfiguration para configuração da conexão
-    private readonly IConfiguration _configuracaoAppSettings;
+    //    private readonly IConfiguration _configuracaoAppSettings;
+
 
     // criando construtor para pegar string de conexão
+
+    public DbContexto(DbContextOptions<DbContexto> opcoes) : base(opcoes)
+    {
+        
+    }
+    /* 
     public DbContexto(IConfiguration configuracaoAppSettings)
     {
         this._configuracaoAppSettings = configuracaoAppSettings;
 
     }
+    */
 
     // mapeando a entidade Adminitrador
     public DbSet<Administrador> Administradores { get; set; } = default!;
@@ -36,6 +44,7 @@ public class DbContexto : DbContext
         );
     }
 
+    /* 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
         if (!optionsBuilder.IsConfigured)
@@ -57,6 +66,7 @@ public class DbContexto : DbContext
         //     ServerVersion.AutoDetect("String de conexão")
         // );
     }
+    */
 
 
 }

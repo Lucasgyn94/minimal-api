@@ -2,6 +2,9 @@ using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using MinimalApi;
+using DotNetEnv;
+
+Env.Load(); // carregando arquivo .env com as credenciais do banco de dados
 
 #region Builder
 var builder = WebApplication.CreateBuilder(args);
@@ -16,6 +19,22 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 // acrescentando serviço do mysql
+var dbServer = Environment.GetEnvironmentVariable("DB_SERVER");
+var dbDatabase = Environment.GetEnvironmentVariable("DB_DATABASE");
+var dbUser = Environment.GetEnvironmentVariable("DB_USER");
+var dbPassword = Environment.GetEnvironmentVariable("DB_PASSWORD");
+
+var stringConexaoDB = $"Server={dbServer};Database={dbDatabase};Uid={dbUser};Pwd={dbPassword};";
+
+builder.Services.AddDbContext<DbContexto>(options =>
+{
+    options.UseMySql(
+        stringConexaoDB,
+        ServerVersion.AutoDetect(stringConexaoDB)
+    );
+});
+
+/* 
 builder.Services.AddDbContext<DbContexto>(options =>
 {
     options.UseMySql(
@@ -23,6 +42,7 @@ builder.Services.AddDbContext<DbContexto>(options =>
         ServerVersion.AutoDetect(builder.Configuration.GetConnectionString("mysql"))
     );
 });
+*/
 
 var app = builder.Build();
 #endregion

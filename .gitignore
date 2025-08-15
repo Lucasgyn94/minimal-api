@@ -2,6 +2,9 @@
 # Edit at https://www.toptal.com/developers/gitignore?templates=windows,linux,macos,dotnetcore,visualstudiocode
 
 ### DotnetCore ###
+# Segredos e arquivos de ambiente
+.env
+
 # .NET Core build folders
 bin/
 obj/
