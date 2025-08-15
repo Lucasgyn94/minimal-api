@@ -226,4 +226,4 @@ app.UseSwaggerUI(); // instanciando a interface do swagger ui
 app.Run();
 #endregion
 
-/*PAREI NA AULA: DELETE para apagar  veículo*/
+/*PAREI NA AULA: criando endpoints para admnistrador*/
