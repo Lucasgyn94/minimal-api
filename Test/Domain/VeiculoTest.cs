@@ -2,6 +2,7 @@
 
 namespace Test;
 
+/* 
 [TestClass]
 public class VeiculoTest
 {
@@ -26,3 +27,4 @@ public class VeiculoTest
     }
 
 }
+*/

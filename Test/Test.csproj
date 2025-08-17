@@ -25,5 +25,11 @@
   <ItemGroup>
     <ProjectReference Include="..\Api\MinimalApi.csproj" />
   </ItemGroup>
+  <!--Adicão de configuração para selecionar o arquivo .env e copiar se for mais novo-->
+  <ItemGroup>
+    <None Update=".env">
+    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
 
 </Project>
