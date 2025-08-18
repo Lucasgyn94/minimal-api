@@ -11,14 +11,6 @@ public class AdministradorServicoTest
     private DbContexto _contexto = default!;
     private AdministradorServico _administradorServico = default!;
 
-    [TestInitialize]
-    public void Configuracao()
-    {
-        this._contexto = CriarContextoDeTeste();
-        this._contexto.Database.ExecuteSqlRaw("TRUNCATE TABLE Administradores");
-        this._administradorServico = new AdministradorServico(this._contexto);
-    }
-
     private DbContexto CriarContextoDeTeste()
     {
         // carregando o arquivo .env
@@ -38,6 +30,14 @@ public class AdministradorServicoTest
         return new DbContexto(optionsBuilder.Options);
 
     }
+    [TestInitialize]
+    public void Configuracao()
+    {
+        this._contexto = CriarContextoDeTeste();
+        this._contexto.Database.ExecuteSqlRaw("TRUNCATE TABLE Administradores");
+        this._administradorServico = new AdministradorServico(this._contexto);
+    }
+
 
     [TestMethod]
     public void IncluirSalvarNovoAdministradorComSucesso()

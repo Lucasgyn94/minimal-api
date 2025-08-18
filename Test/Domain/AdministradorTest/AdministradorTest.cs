@@ -2,7 +2,7 @@
 
 namespace Test;
 
-/* 
+
 [TestClass]
 public class AdministradorTest
 {
@@ -28,4 +28,3 @@ public class AdministradorTest
     }
     
 }
-*/
