@@ -4,6 +4,7 @@
 ### DotnetCore ###
 # Segredos e arquivos de ambiente
 .env
+appsettings.Testing.json
 
 # .NET Core build folders
 bin/
