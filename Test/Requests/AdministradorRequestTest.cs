@@ -61,8 +61,8 @@ public class AdministradorRequestTest
             Email = "adm@teste.com",
             Senha = "123456"
         };
-        var content = new StringContent(JsonSerializer.Serialize(loginDto), Encoding.UTF8, "application/json");
-
+        //var content = new StringContent(JsonSerializer.Serialize(loginDto), Encoding.UTF8, "application/json");
+        var content = JsonContent.Create(loginDto);
         // Act
         var response = await _client.PostAsync("/administradores/login", content);
 
@@ -86,7 +86,8 @@ public class AdministradorRequestTest
             Email = "adm@teste_invalido.com",
             Senha = "123456"
         };
-        var content = new StringContent(JsonSerializer.Serialize(loginDto), Encoding.UTF8, "application/json");
+        //var content = new StringContent(JsonSerializer.Serialize(loginDto), Encoding.UTF8, "application/json");
+        var content = JsonContent.Create(loginDto);
 
         // Act
         var response = await _client.PostAsync("/administradores/login", content);
@@ -112,7 +113,8 @@ public class AdministradorRequestTest
 
         };
 
-        var content = new StringContent(JsonSerializer.Serialize(novoAdmDto), Encoding.UTF8, "application/json");
+        //var content = new StringContent(JsonSerializer.Serialize(novoAdmDto), Encoding.UTF8, "application/json");
+        var content = JsonContent.Create(novoAdmDto);
 
         //Act
         var response = await _client.PostAsync("/administradores", content);
@@ -134,7 +136,8 @@ public class AdministradorRequestTest
             Senha = "123456",
         };
 
-        var content = new StringContent(JsonSerializer.Serialize(novoAdmDto), Encoding.UTF8, "application/json");
+        //var content = new StringContent(JsonSerializer.Serialize(novoAdmDto), Encoding.UTF8, "application/json");
+        var content = JsonContent.Create(novoAdmDto);
 
         // Act
         var response = await _client.PostAsync("/administradores", content);
@@ -157,7 +160,8 @@ public class AdministradorRequestTest
             Perfil = 0
         };
 
-        var content = new StringContent(JsonSerializer.Serialize(novoAdmDto), Encoding.UTF8, "application/json");
+        //var content = new StringContent(JsonSerializer.Serialize(novoAdmDto), Encoding.UTF8, "application/json");
+        var content = JsonContent.Create(novoAdmDto);
 
         // act
         var response = await _client.PostAsync("/administradores", content);
