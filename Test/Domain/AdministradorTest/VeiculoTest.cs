@@ -7,7 +7,7 @@ namespace Test;
 public class VeiculoTest
 {
     [TestMethod]
-    public void TestarGetSetPropriedadesVeiculos()
+    public void TestarGetSetPropriedadesVeiculosComSucesso()
     {
         // Arrange
         var veiculo = new Veiculo();

@@ -8,7 +8,7 @@ public class AdministradorTest
 {
     
     [TestMethod]
-    public void TestarGetSetPropriedadesAdministradores()
+    public void TestarGetSetPropriedadesAdministradoresComSucesso()
     {
         // Arrange: onde fica todas as variáveis necessárias para as validações
 
