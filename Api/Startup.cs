@@ -70,6 +70,7 @@ public class Startup
                     new string[]{}
                 }
             });
+
         });
 
         var stringConexaoDB = Configuration.GetConnectionString("DefaultConnection");
@@ -85,6 +86,16 @@ public class Startup
 
         });
 
+        // configurando serviços para configuração de cors
+        services.AddCors(options =>
+        {
+            options.AddDefaultPolicy(builder =>
+            {
+                builder.AllowAnyOrigin()
+                .AllowAnyMethod()
+                .AllowAnyHeader();
+            });
+        });
 
     }
 
@@ -99,6 +110,8 @@ public class Startup
         // Configurando para usar autenticação e autorização jwt
         app.UseAuthentication();
         app.UseAuthorization();
+
+        app.UseCors();
 
         app.UseEndpoints(endpoints =>
         {
