@@ -6,35 +6,13 @@ using MinimalApi;
 namespace Test;
 
 [TestClass]
-public class AdministradorServicoTest
+public class AdministradorServicoTest : BaseTest
 {
-    private DbContexto _contexto = default!;
     private AdministradorServico _administradorServico = default!;
 
-    private DbContexto CriarContextoDeTeste()
-    {
-        // carregando o arquivo .env
-        DotNetEnv.Env.Load();
-
-        var server = Environment.GetEnvironmentVariable("DB_SERVER");
-        var database = Environment.GetEnvironmentVariable("DB_DATABASE");
-        var user = Environment.GetEnvironmentVariable("DB_USER");
-        var password = Environment.GetEnvironmentVariable("DB_PASSWORD");
-        var stringDeConexao = $"Server={server};Database={database};Uid={user};Pwd={password};";
-
-        // Confgurando o DbContext para utilizar o MySql com essa string de conexão
-        var optionsBuilder = new DbContextOptionsBuilder<DbContexto>();
-
-        optionsBuilder.UseMySql(stringDeConexao, ServerVersion.AutoDetect(stringDeConexao));
-
-        return new DbContexto(optionsBuilder.Options);
-
-    }
     [TestInitialize]
     public void Configuracao()
     {
-        this._contexto = CriarContextoDeTeste();
-        this._contexto.Database.ExecuteSqlRaw("TRUNCATE TABLE Administradores");
         this._administradorServico = new AdministradorServico(this._contexto);
     }
 
@@ -54,7 +32,7 @@ public class AdministradorServicoTest
         // Assert
         var admSalvo = this._administradorServico.BuscarPorId(adm.Id);
         Assert.IsNotNull(admSalvo);
-        Assert.AreEqual(1, this._administradorServico.Todos(1).Count);
+        Assert.AreEqual(2, this._administradorServico.Todos(1).Count);
 
     }
 
@@ -151,7 +129,7 @@ public class AdministradorServicoTest
 
         // Assert
         Assert.IsNotNull(listaDeAdms);
-        Assert.AreEqual(2, listaDeAdms.Count);
+        Assert.AreEqual(3, listaDeAdms.Count);
     }
 
     [TestMethod]
@@ -165,6 +143,6 @@ public class AdministradorServicoTest
 
         // Assert
         Assert.IsNotNull(listaDeAdms);
-        Assert.AreEqual(0, listaDeAdms.Count);
+        Assert.AreEqual(1, listaDeAdms.Count);
     }
 }

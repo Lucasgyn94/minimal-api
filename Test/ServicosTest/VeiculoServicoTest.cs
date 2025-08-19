@@ -4,29 +4,12 @@ using MinimalApi;
 namespace Test;
 
 [TestClass]
-public class VeiculoServicoTest
+public class VeiculoServicoTest : BaseTest
 {
-    private DbContexto _contexto = default!;
     private VeiculoServico _veiculoServico = default!;
-    private DbContexto CriarContextoDeTeste()
-    {
-        DotNetEnv.Env.Load();
-        var server = Environment.GetEnvironmentVariable("DB_SERVER");
-        var database = Environment.GetEnvironmentVariable("DB_DATABASE");
-        var user = Environment.GetEnvironmentVariable("DB_USER");
-        var password = Environment.GetEnvironmentVariable("DB_PASSWORD");
-        var stringDeConexao = $"Server={server};Database={database};Uid={user};Pwd={password};";
-
-        var optionsBuilder = new DbContextOptionsBuilder<DbContexto>();
-        optionsBuilder.UseMySql(stringDeConexao, ServerVersion.AutoDetect(stringDeConexao));
-        return new DbContexto(optionsBuilder.Options);
-    }
-
     [TestInitialize]
     public void Configuracao()
     {
-        this._contexto = CriarContextoDeTeste();
-        this._contexto.Database.ExecuteSqlRaw("TRUNCATE TABLE Veiculos");
         this._veiculoServico = new VeiculoServico(_contexto);
     }
 

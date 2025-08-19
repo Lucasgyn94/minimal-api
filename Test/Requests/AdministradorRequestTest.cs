@@ -1,5 +1,7 @@
 ﻿
 using System.Net;
+using System.Net.Http.Headers;
+using System.Net.Http.Json;
 using System.Text;
 using System.Text.Json;
 using Microsoft.AspNetCore.Http.Features;
@@ -26,6 +28,7 @@ public class AdministradorRequestTest
         Setup.ClassCleanup();
     }
 
+    #region Metodo Auxiliar
     // Método auxiliar para realizar login e retornar token JWT
     private async Task<string> LoginAssincronoEPegarToken(string email, string senha)
     {
@@ -34,9 +37,11 @@ public class AdministradorRequestTest
             Email = email,
             Senha = senha
         };
-        var content = new StringContent(JsonSerializer.Serialize(loginDto));
+        var content = JsonContent.Create(loginDto);
 
-        var response = await _client.PostAsync("/administradores/login", content);
+        var response = await _client.PostAsync("administradores/login", content);
+
+        response.EnsureSuccessStatusCode();
 
         var responseBody = await response.Content.ReadAsStringAsync();
         var adminLogado = JsonSerializer.Deserialize<AdministradorLogado>(responseBody, _jsonOptions);
@@ -44,8 +49,9 @@ public class AdministradorRequestTest
         Assert.IsNotNull(adminLogado?.Token, "O token não deveria ser nulo!");
         return adminLogado.Token;
     }
+    #endregion
 
-    // Testes de Login (Post / administradores/login)
+    #region Testes de Login (Post /administradores/login)
     [TestMethod]
     public async Task LoginComCredenciaisValidasRetornaOkComToken()
     {
@@ -88,5 +94,249 @@ public class AdministradorRequestTest
         // Assert
         Assert.AreEqual(HttpStatusCode.Unauthorized, response.StatusCode);
     }
+    #endregion
+
+    #region Testes de criar Adminitradores (POST /administradores)
+    [TestMethod]
+    public async Task CriarAdministradorComDadosValidosEAutorizacaoDeveRetornarCreated()
+    {
+        //Arrange
+        var token = await LoginAssincronoEPegarToken("adm@teste.com", "123456");
+        _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
+        var novoAdmDto = new AdministradorDTO
+        {
+            Email = "novo_adm@teste.com",
+            Senha = "123456",
+            Perfil = 0
+
+        };
+
+        var content = new StringContent(JsonSerializer.Serialize(novoAdmDto), Encoding.UTF8, "application/json");
+
+        //Act
+        var response = await _client.PostAsync("/administradores", content);
+
+        //Assert
+        Assert.AreEqual(HttpStatusCode.Created, response.StatusCode);
+        Assert.IsNotNull(response.Headers.Location, "O cabeçalho não foi retornado");
+
+    }
+
+    [TestMethod]
+    public async Task CriarAdministradorSemAutorizacaoDeveRetornarUnauthorized()
+    {
+        // Arrange
+        _client.DefaultRequestHeaders.Authorization = null;
+        var novoAdmDto = new AdministradorDTO
+        {
+            Email = "adm@teste.com.br",
+            Senha = "123456",
+        };
+
+        var content = new StringContent(JsonSerializer.Serialize(novoAdmDto), Encoding.UTF8, "application/json");
+
+        // Act
+        var response = await _client.PostAsync("/administradores", content);
+
+        // Assert
+        Assert.AreEqual(HttpStatusCode.Unauthorized, response.StatusCode);
+    }
+
+    [TestMethod]
+    public async Task CriarAdministradorComAutorizacaoDeEditorDeveRetornarForbidden()
+    {
+        // arrange
+        var token = await LoginAssincronoEPegarToken("editor@teste.com", "123456");
+        _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
+        var novoAdmDto = new AdministradorDTO
+        {
+            Email = "adm@teste.com",
+            Senha = "123456",
+            Perfil = 0
+        };
+
+        var content = new StringContent(JsonSerializer.Serialize(novoAdmDto), Encoding.UTF8, "application/json");
+
+        // act
+        var response = await _client.PostAsync("/administradores", content);
+
+        // assert
+        Assert.AreEqual(HttpStatusCode.Forbidden, response.StatusCode);
+    }
+
+    #endregion
+
+    #region Testes de Listar Administradores (GET /administradores)
+    public async Task ObterTodosOsAdministradoresComAutorizacaoDeveRetornarOkComLista()
+    {
+        // Arrange
+        var token = await LoginAssincronoEPegarToken("adm@teste.com", "123456");
+        _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Beares", token);
+
+        // Act
+        var response = await _client.GetAsync("/administradores");
+
+        // Assert
+        Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
+        var responseBody = await response.Content.ReadAsStringAsync();
+        var administradores = JsonSerializer.Deserialize<List<AdministradorModelView>>(responseBody, _jsonOptions);
+
+        Assert.IsNotNull(administradores);
+        Assert.IsTrue(administradores.Count > 0, "Lista de administradores vazia!");
+    }
+    #endregion
+
+    #region Testes de buscar por ID (GET /administradores/{id})
+    [TestMethod]
+    public async Task ObterAdministradorPorIdComIdValidoEAutorizacaoDeveRetornaOk()
+    {
+        // Arrange
+        var token = await LoginAssincronoEPegarToken("adm@teste.com", "123456");
+        _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+        const int idParaBuscar = 1;
+
+        // Act
+        var response = await _client.GetAsync($"administradores/{idParaBuscar}");
+
+        // Assert
+        Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
+        var responseBody = await response.Content.ReadAsStringAsync();
+        var adminitrador = JsonSerializer.Deserialize<AdministradorModelView>(responseBody, _jsonOptions);
+
+        Assert.IsNotNull(adminitrador);
+        Assert.AreEqual(idParaBuscar, adminitrador.Id);
+    }
+
+    [TestMethod]
+    public async Task ObterAdministradorPorIdComIdInvalidoDeveRetornarNotFound()
+    {
+        // arrange
+        var token = await LoginAssincronoEPegarToken("adm@teste.com", "123456");
+        _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+        const int idParaBuscar = 999;
+
+        // act
+        var response = await _client.GetAsync($"/administradores/{idParaBuscar}");
+
+        // assert
+        Assert.AreEqual(HttpStatusCode.NotFound, response.StatusCode);
+    }
+
+    #endregion
+
 
 }
+
+/*
+using System.Net;
+using System.Net.Http.Headers;
+using System.Text;
+using System.Text.Json;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using MinimalApi;
+
+namespace Test;
+
+[TestClass]
+public class AdministradorRequestTest
+{
+    [TestMethod]
+    public async Task CriarAdministrador_SemAutorizacao_DeveRetornarUnauthorized()
+    {
+        // Arrange
+        _client.DefaultRequestHeaders.Authorization = null; // Garante que não há token
+        var novoAdmDto = new AdministradorDTO { Email = "novo@adm.com", Senha = "nova-senha", Perfil = "Adm" };
+        var content = new StringContent(JsonSerializer.Serialize(novoAdmDto), Encoding.UTF8, "application/json");
+
+        // Act
+        var response = await _client.PostAsync("/administradores", content);
+
+        // Assert
+        Assert.AreEqual(HttpStatusCode.Unauthorized, response.StatusCode);
+    }
+
+    [TestMethod]
+    public async Task CriarAdministrador_ComAutorizacaoDeEditor_DeveRetornarForbidden()
+    {
+        // Arrange
+        var token = await LoginAndGetTokenAsync("editor@teste.com", "123456"); // Login como Editor
+        _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+        
+        var novoAdmDto = new AdministradorDTO { Email = "novo@adm.com", Senha = "nova-senha", Perfil = "Adm" };
+        var content = new StringContent(JsonSerializer.Serialize(novoAdmDto), Encoding.UTF8, "application/json");
+
+        // Act
+        var response = await _client.PostAsync("/administradores", content);
+
+        // Assert
+        Assert.AreEqual(HttpStatusCode.Forbidden, response.StatusCode);
+    }
+
+    #endregion
+
+    #region Testes de Listar Administradores (GET /administradores)
+
+    [TestMethod]
+    public async Task ObterTodosAdministradores_ComAutorizacao_DeveRetornarOkComLista()
+    {
+        // Arrange
+        var token = await LoginAndGetTokenAsync("adm@teste.com", "123456");
+        _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
+        // Act
+        var response = await _client.GetAsync("/administradores");
+
+        // Assert
+        Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
+        var responseBody = await response.Content.ReadAsStringAsync();
+        var administradores = JsonSerializer.Deserialize<List<AdministradorModelView>>(responseBody, _jsonOptions);
+
+        Assert.IsNotNull(administradores);
+        Assert.IsTrue(administradores.Count > 0, "A lista de administradores não deveria estar vazia.");
+    }
+
+    #endregion
+
+    #region Testes de Buscar por ID (GET /administradores/{id})
+
+    [TestMethod]
+    public async Task ObterAdministradorPorId_ComIdValidoEAutorizacao_DeveRetornarOk()
+    {
+        // Arrange
+        var token = await LoginAndGetTokenAsync("adm@teste.com", "123456");
+        _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+        const int idParaBuscar = 1;
+
+        // Act
+        var response = await _client.GetAsync($"/administradores/{idParaBuscar}");
+
+        // Assert
+        Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
+        var responseBody = await response.Content.ReadAsStringAsync();
+        var administrador = JsonSerializer.Deserialize<AdministradorModelView>(responseBody, _jsonOptions);
+
+        Assert.IsNotNull(administrador);
+        Assert.AreEqual(idParaBuscar, administrador.Id);
+    }
+
+    [TestMethod]
+    public async Task ObterAdministradorPorId_ComIdInvalido_DeveRetornarNotFound()
+    {
+        // Arrange
+        var token = await LoginAndGetTokenAsync("adm@teste.com", "123456");
+        _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+        const int idParaBuscar = 999; // ID que não existe no mock
+
+        // Act
+        var response = await _client.GetAsync($"/administradores/{idParaBuscar}");
+
+        // Assert
+        Assert.AreEqual(HttpStatusCode.NotFound, response.StatusCode);
+    }
+
+    #endregion
+}
+
+ */
