@@ -112,7 +112,7 @@ public class VeiculoRequestTest
     {
         // arrange
         var token = await LoginAssincronoEPegarToken("editor@teste.com", "123456");
-        _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("bearer", token);
+        _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
         var veiculoDto = new VeiculoDTO
         {
             Nome = "Fusca",
@@ -157,7 +157,7 @@ public class VeiculoRequestTest
             "editor@teste.com",
             "123456"
         );
-        _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("bearer", token);
+        _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
         // Act
         var response = await _client.GetAsync("/veiculos/999"); // passando id invalido
@@ -212,7 +212,7 @@ public class VeiculoRequestTest
             "editor@teste.com",
             "123456"
         );
-        _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("bearer", tokenEditor);
+        _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", tokenEditor);
 
         var veiculoAtualizadoDto = new VeiculoDTO
         {
@@ -265,7 +265,7 @@ public class VeiculoRequestTest
             "editor@teste.com",
             "123456"
         );
-        _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("bearer", tokenEditor);
+        _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", tokenEditor);
 
         // Act
         var response = await _client.DeleteAsync($"veiculos/{veiculoCriado.Id}");
