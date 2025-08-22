@@ -45,33 +45,56 @@ public class Startup
         // injetando serviço de veículos
         services.AddScoped<IVeiculoServico, VeiculoServico>();
 
-        // configuração do swagger
+        // Configuração do Swagger
         services.AddEndpointsApiExplorer();
         services.AddSwaggerGen(options =>
         {
+            // Define as informações gerais da API que aparecerão no topo
+            options.SwaggerDoc("v1", new OpenApiInfo
+            {
+                Version = "v1",
+                Title = "API de Gerenciamento de Veículos",
+                Description = """
+                            Uma API RESTful para o gerenciamento de veículos e administradores.
+                            
+                            Este projeto demonstra as melhores práticas de desenvolvimento de APIs com .NET 8, incluindo:
+                            - Autenticação e Autorização com JWT.
+                            - Arquitetura Limpa (Clean Architecture).
+                            - Testes de Integração e de Serviço.
+                            - Padrão de Minimal APIs.
+                            """,
+                Contact = new OpenApiContact
+                {
+                    Name = "Lucas Ferreira Da Silva",
+                    Url = new Uri("https://www.linkedin.com/in/lucas-ferreira-soares-desenvolvedor/"),
+                    Email = "https://www.linkedin.com/in/lucas-ferreira-55053412a/"
+                },
+                License = new OpenApiLicense
+                {
+                    Name = "Licença MIT",
+                    Url = new Uri("https://opensource.org/licenses/MIT")
+                }
+            });
+
+            // Esta parte, que configura o cadeado de autorização, permanece igual
             options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
             {
                 Name = "Authorization",
                 Type = SecuritySchemeType.Http,
                 Scheme = "bearer",
                 BearerFormat = "JWT",
-                Description = "Insira o seu token aqui: "
+                In = ParameterLocation.Header,
+                Description = "Insira o seu token JWT aqui, prefixado com 'Bearer '."
             });
-
             options.AddSecurityRequirement(new OpenApiSecurityRequirement
             {
                 {
-                    new OpenApiSecurityScheme{
-                        Reference = new OpenApiReference{
-                            Type = ReferenceType.SecurityScheme,
-                            Id = "Bearer"
-                        }
-                    },
-                    new string[]{}
+                    new OpenApiSecurityScheme { Reference = new OpenApiReference { Type = ReferenceType.SecurityScheme, Id = "Bearer" } },
+                    new string[] {}
                 }
             });
-
         });
+
 
         var stringConexaoDB = Configuration.GetConnectionString("DefaultConnection");
 
@@ -116,7 +139,23 @@ public class Startup
         app.UseEndpoints(endpoints =>
         {
             #region Home
-            endpoints.MapGet("/", () => Results.Json(new Home())).AllowAnonymous().WithTags("Home");
+            endpoints.MapGet("/", (HttpContext httpContext) => {
+
+                var request = httpContext.Request;
+                // Construindo a URL base dinamicamente
+                var baseUrl = $"{request.Scheme}://{request.Host}{request.PathBase}";
+
+                var response = new
+                {
+                    Titulo = "API de Gerenciamento de Veículos",
+                    Mensagem = "Bem-vindo! API construída para resolução do Desafio De Projeto - Trabalhando com ASP.NET Minimals APIs do bootcamp GFT Start #7 .NET.",
+                    Versao = "1.0.0",
+                    Documentacao = $"{baseUrl}/swagger" 
+                };
+
+                return Results.Json(response);
+
+            }).AllowAnonymous().WithTags("Home");
             #endregion
 
             #region Administradores
