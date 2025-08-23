@@ -1,6 +1,4 @@
-﻿
-
-namespace MinimalApi;
+﻿namespace MinimalApi;
 
 public class AdministradorServico : IAdministradorServico
 {
@@ -19,6 +17,9 @@ public class AdministradorServico : IAdministradorServico
 
     public Administrador Incluir(Administrador administrador)
     {
+        /*Inclusão do bcrypt para antes de salvar gerar o ash da senha informada, o segundo parâmetro (work factor) define a 'força' do hash (11 ou 12 é um bom valor) */
+        administrador.Senha = BCrypt.Net.BCrypt.HashPassword(administrador.Senha, workFactor: 11);
+
         this._contexto.Administradores.Add(administrador);
         this._contexto.SaveChanges();
         return administrador;
@@ -26,8 +27,21 @@ public class AdministradorServico : IAdministradorServico
 
     public Administrador? Login(LoginDTO loginDTO)
     {
-        var adm = this._contexto.Administradores.Where(a => a.Email == loginDTO.Email && a.Senha == loginDTO.Senha).FirstOrDefault();
-        return adm;
+        //var adm = this._contexto.Administradores.Where(a => a.Email == loginDTO.Email && a.Senha == loginDTO.Senha).FirstOrDefault();
+        var adm = this._contexto.Administradores.FirstOrDefault(a => a.Email == loginDTO.Email);
+
+        if (adm == null)
+        {
+            return null;
+        }
+
+        /*Verificando se a senha fornecida no login (loginDTO.Senha) corresponde ao hash salvo no banco (adm.Senha).*/
+        if (BCrypt.Net.BCrypt.Verify(loginDTO.Senha, adm.Senha))
+        {
+            return adm;
+        }
+
+        return null;
     }
 
     public List<Administrador> Todos(int? pagina)

@@ -34,7 +34,7 @@ public class AdministradorServicoMock : IAdministradorServico
 
     public Administrador? Login(LoginDTO loginDTO)
     {
-        return _administradores.Find(a => a.Email == loginDTO.Email && a.Senha == loginDTO.Senha);
+        return _administradores.Find(a => a.Email == loginDTO.Email);
     }
 
     public List<Administrador> Todos(int? pagina)

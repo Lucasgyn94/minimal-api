@@ -1,8 +1,5 @@
-﻿using DotNetEnv;
-using Microsoft.AspNetCore.Components.Forms;
-using Microsoft.AspNetCore.Hosting;
+﻿using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using MinimalApi;
 
@@ -12,13 +9,13 @@ public class Setup
 {
     public const String PORT = "5001";
     public static TestContext testContext = default!;
-    public static WebApplicationFactory<Startup> http = default!;
+    public static WebApplicationFactory<Program> http = default!;
     public static HttpClient client = default!;
 
     public static void ClassInit(TestContext testContext)
     {
         Setup.testContext = testContext;
-        Setup.http = new WebApplicationFactory<Startup>();
+        Setup.http = new WebApplicationFactory<Program>();
 
         Setup.http = Setup.http.WithWebHostBuilder(builder =>
         {
