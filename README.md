@@ -93,7 +93,7 @@ dotnet user-secrets init
 
 dotnet user-secrets set "ConnectionStrings:DefaultConnection" "Server=localhost;Database=minimal_api;Uid=SEU_USUARIO;Pwd=SUA_SENHA"
 
-dotnet user-secrets set "Jwt" "SUA_CHAVE_SECRETA_SUPER_LONGA_E_SEGURA_AQUI_12345"
+dotnet user-secrets set "Jwt" "SUA_CHAVE_SECRETA_DE_NO_MINIMO_32_CARACTERES_E_SEGURA_AQUI_12345"
 ```
 
 **OBS**: Lembrar de criar o banco de dados __minimal_api__ no __MySQL__ antes de prosseguir.
