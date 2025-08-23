@@ -15,7 +15,7 @@
 
 * __Testes de Integração e de Serviço__.
 
-## 🌱 A Jornada de Evolução: De um Projeto de Bootcamp a uma API Robusta
+## 🌱 Evolução: De um Projeto de Bootcamp a uma API mais Robusta
 * A seguir, os principais passos da evolução que fiz no projeto:
 
 1. __Fundação com Minimal API__: O projeto nasceu utilizando o padrão Minimal APIs do .NET, focando em simplicidade e performance.
