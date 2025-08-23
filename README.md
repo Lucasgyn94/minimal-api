@@ -192,10 +192,6 @@ Abaixo está o código HTML e CSS (inline) para a sua seção de Endpoints. Voc�
 ## 📫 Contato
 **Lucas Ferreira da Silva**
 <br>
-<a href="https://www.linkedin.com/in/lucas-ferreira-soares-desenvolvedor/" target="_blank" rel="noopener noreferrer">
-  <img src="https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white" alt="LinkedIn">
-</a>
+[![LinkedIn](https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/lucas-ferreira-55053412a/)
 <br>
-<a href="https://github.com/Lucasgyn94" target="_blank" rel="noopener noreferrer">
-  <img src="https://img.shields.io/badge/GitHub-181717?style=for-the-badge&logo=github&logoColor=white" alt="GitHub">
-</a>
+[![GitHub](https://img.shields.io/badge/GitHub-181717?style=for-the-badge&logo=github&logoColor=white)](https://github.com/Lucasgyn94)
