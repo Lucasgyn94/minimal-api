@@ -189,6 +189,9 @@ Abaixo está o código HTML e CSS (inline) para a sua seção de Endpoints. Voc�
   </tbody>
 </table>
 
+## Link do Repositório Original Sem Modificações
+[![GitHub](https://img.shields.io/badge/GitHub-181717?style=for-the-badge&logo=github&logoColor=white)](https://github.com/digitalinnovationone/minimal-api)
+
 ## 📫 Contato
 **Lucas Ferreira da Silva**
 <br>
