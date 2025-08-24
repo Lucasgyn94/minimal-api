@@ -101,11 +101,11 @@ public class Program
             ## Configurando o serviço de Forwarded Headers (Cabeçalhos Encaminhados)
             * Serve para informar que a nossa API.NET pode confiar nas informações que o Nginx está enviando sobre a requisição original. 
             */
-            builder.Services.Configure<ForwardedHeadersOptions>(options =>
-            {
-                options.ForwardedHeaders =
-                    ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto;
-            });
+            // builder.Services.Configure<ForwardedHeadersOptions>(options =>
+            // {
+            //     options.ForwardedHeaders =
+            //         ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto;
+            // });
 
             // configuração do DbContext
             var stringConexaoDB = builder.Configuration.GetConnectionString("DefaultConnection");
@@ -128,7 +128,7 @@ public class Program
         #region  Pipeline HTTP
         {
             /*Adicionando o Middleware de Forwarded Headers */
-            app.UseForwardedHeaders();
+            //app.UseForwardedHeaders();
 
             app.UseSwagger();
             app.UseSwaggerUI();
