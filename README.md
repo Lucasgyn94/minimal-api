@@ -1,6 +1,6 @@
 # 🚀 API de Gerenciamento de Veículos
 ## 📖 Sobre o Projeto
-* Esta API RESTful foi desenvolvida como parte do bootcamp GFT Start #7 .NET. O projeto inicial, uma Minimal API funcional, foi o ponto de partida para uma jornada de aprimoramento e aplicação de boas práticas de arquitetura e desenvolvimento de software, transformando-a em uma solução robusta, segura e escalável, pronta para um ambiente de produção.
+* Esta API RESTful foi desenvolvida como parte do bootcamp GFT Start #7 .NET. O projeto inicial, uma Minimal API funcional, foi o ponto de partida para uma jornada de aprimoramento e aplicação de boas práticas de arquitetura e desenvolvimento de software, transformando-a em uma solução robusta, segura e escalável.
 
 * O objetivo principal desta evolução foi demonstrar, na prática, a aplicação de conceitos de Clean Architecture, segurança, testabilidade e organização de código no ecossistema .NET.
 
