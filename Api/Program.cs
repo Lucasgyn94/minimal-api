@@ -99,6 +99,19 @@ public class Program
             {
                 options.UseMySql(stringConexaoDB, ServerVersion.AutoDetect(stringConexaoDB));
             });
+
+            // Configuração de cors
+            builder.Services.AddCors(options =>
+            {
+                options.AddDefaultPolicy(policyBuilder =>
+                {
+                    policyBuilder
+                        .AllowAnyOrigin()
+                        .AllowAnyMethod()
+                        .AllowAnyHeader();
+                                 
+                });
+            });
         }
         #endregion
 
@@ -116,6 +129,8 @@ public class Program
 
             app.UseSwagger();
             app.UseSwaggerUI();
+
+            app.UseCors();
 
             app.UseAuthentication();
             app.UseAuthorization();
