@@ -64,11 +64,6 @@ public class Program
                         Name = "Lucas Ferreira Da Silva",
                         Url = new Uri("https://www.linkedin.com/in/lucas-ferreira-soares-desenvolvedor/"),
                         Email = "https://www.linkedin.com/in/lucas-ferreira-55053412a/"
-                    },
-                    License = new OpenApiLicense
-                    {
-                        Name = "Licença MIT",
-                        Url = new Uri("https://opensource.org/licenses/MIT")
                     }
                 });
 
