@@ -129,12 +129,9 @@ public class Program
         {
             /*Adicionando o Middleware de Forwarded Headers */
             app.UseForwardedHeaders();
-            
-            if (app.Environment.IsDevelopment())
-            {
-                app.UseSwagger();
-                app.UseSwaggerUI();
-            }
+
+            app.UseSwagger();
+            app.UseSwaggerUI();
 
             app.UseAuthentication();
             app.UseAuthorization();
