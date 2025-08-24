@@ -1,10 +1,10 @@
+using System.ComponentModel.DataAnnotations;
 using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using MinimalApi;
-using Microsoft.AspNetCore.HttpOverrides; 
 
 public class Program
 {
@@ -58,12 +58,13 @@ public class Program
                                 - Arquitetura Limpa (Clean Architecture).
                                 - Testes de Integração e de Serviço.
                                 - Padrão de Minimal APIs.
+                                - Deploy na AWS
                                 """,
                     Contact = new OpenApiContact
                     {
                         Name = "Lucas Ferreira Da Silva",
-                        Url = new Uri("https://www.linkedin.com/in/lucas-ferreira-soares-desenvolvedor/"),
-                        Email = "https://www.linkedin.com/in/lucas-ferreira-55053412a/"
+                        Url = new Uri("https://www.linkedin.com/in/lucas-ferreira-55053412a/"),
+                        Email = new string("needslucas944@gmail.com")
                     }
                 });
 
