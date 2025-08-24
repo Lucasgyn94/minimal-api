@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using MinimalApi;
+using Microsoft.AspNetCore.HttpOverrides; 
 
 public class Program
 {
@@ -96,6 +97,16 @@ public class Program
                 });
             });
 
+            /*
+            ## Configurando o serviço de Forwarded Headers (Cabeçalhos Encaminhados)
+            * Serve para informar que a nossa API.NET pode confiar nas informações que o Nginx está enviando sobre a requisição original. 
+            */
+            builder.Services.Configure<ForwardedHeadersOptions>(options =>
+            {
+                options.ForwardedHeaders =
+                    ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto;
+            });
+
             // configuração do DbContext
             var stringConexaoDB = builder.Configuration.GetConnectionString("DefaultConnection");
             builder.Services.AddDbContext<DbContexto>(options =>
@@ -116,6 +127,9 @@ public class Program
         */
         #region  Pipeline HTTP
         {
+            /*Adicionando o Middleware de Forwarded Headers */
+            app.UseForwardedHeaders();
+            
             if (app.Environment.IsDevelopment())
             {
                 app.UseSwagger();
