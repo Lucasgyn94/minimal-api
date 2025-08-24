@@ -117,11 +117,6 @@ dotnet test
 ```
 
 ## 📍 Endpoints da API
-Claro! Usar HTML para a tabela no README.md permite um controle de estilo muito maior e pode, de fato, deixar a documentação com um aspecto mais profissional e atrativo.
-
-Abaixo está o código HTML e CSS (inline) para a sua seção de Endpoints. Você pode simplesmente copiar este bloco de código e colar no seu README.md no lugar da tabela de Markdown que eu havia gerado anteriormente.
-
-📍 Endpoints da API
 <table style="width:100%; border-collapse: collapse; border: 1px solid #444;">
   <thead style="background-color: #2c3e50; color: #ecf0f1;">
     <tr>
