@@ -40,7 +40,7 @@
 
 * A lógica de geração de tokens JWT foi abstraída para um serviço dedicado (__ITokenService__), tornando o código mais limpo e reutilizável.
 
-* Refatoração de Testes: A suíte de testes foi adaptada para a nova arquitetura, sendo implementado como parte do desafio __testes de integração e de serviço__ para classe de __Veículo__.
+* Refatoração de Testes: Foi implementado novos testes de requisição, persistência, serviço e unidade para classe de Veículo como parte do desafio lançado pelo professor. A suíte de testes foi adaptada para a nova arquitetura.
 
 ## 🛠️ Tecnologias e Ferramentas Utilizadas
 * __Framework__: .NET 8
