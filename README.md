@@ -13,7 +13,7 @@
 
 * __Endpoints documentados__ e prontos para teste com Swagger (OpenAPI).
 
-* __Testes de Integração e de Serviço__.
+* __Testes de Unidade, Integração, Requisição e Serviço__.
 
 ## 🌱 Evolução: De um Projeto de Bootcamp a uma API mais Robusta
 * A seguir, os principais passos da evolução que fiz no projeto:
